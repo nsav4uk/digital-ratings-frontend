@@ -1,26 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Navigation from "./containers/navigation/Navigation";
+import Router from "./components/router/Router";
+import { RootState } from "./store";
+import { connect, ConnectedProps } from "react-redux";
 
-function App() {
+const mapStateToProps = (state: RootState) => ({
+  user: state.user.currentUser,
+});
+
+const connector = connect(
+  mapStateToProps
+);
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+const App: React.FC<PropsFromRedux> = ({ user }) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navigation/>
+      <Router isLoggedIn={user.userId !== undefined}/>
     </div>
   );
-}
+};
 
-export default App;
+export default connector(App);
